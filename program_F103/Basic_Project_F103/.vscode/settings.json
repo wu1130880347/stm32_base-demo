@@ -1,0 +1,20 @@
+{
+    "files.associations": {
+        "*.c": "c",
+        "global_config.h": "c",
+        "led.h": "c",
+        "sys.h": "c",
+        "stm32f10x.h": "c",
+        "main.h": "c",
+        "includes.h": "c",
+        "stm32f10x_rcc.h": "c",
+        "stm32f10x_conf.h": "c",
+        "bsp_board_test.h": "c",
+        "usart.h": "c",
+        "xshell_cmd.h": "c",
+        "app_task.h": "c",
+        "font.h": "c",
+        "lcd_12864.h": "c",
+        "debugsys.h": "c"
+    }
+}
