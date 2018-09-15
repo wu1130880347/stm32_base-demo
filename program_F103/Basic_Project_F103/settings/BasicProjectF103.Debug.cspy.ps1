@@ -23,9 +23,9 @@
 
 if ($debugfile -eq "")
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "H:\cp_data\STM32\program_F103\Basic_Project_F103\settings\BasicProjectF103.Debug.general.xcl" --backend -f "H:\cp_data\STM32\program_F103\Basic_Project_F103\settings\BasicProjectF103.Debug.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "H:\cp_data\test\program_F103\Basic_Project_F103\settings\BasicProjectF103.Debug.general.xcl" --backend -f "H:\cp_data\test\program_F103\Basic_Project_F103\settings\BasicProjectF103.Debug.driver.xcl" 
 }
 else
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "H:\cp_data\STM32\program_F103\Basic_Project_F103\settings\BasicProjectF103.Debug.general.xcl" --debug_file=$debugfile --backend -f "H:\cp_data\STM32\program_F103\Basic_Project_F103\settings\BasicProjectF103.Debug.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "H:\cp_data\test\program_F103\Basic_Project_F103\settings\BasicProjectF103.Debug.general.xcl" --debug_file=$debugfile --backend -f "H:\cp_data\test\program_F103\Basic_Project_F103\settings\BasicProjectF103.Debug.driver.xcl" 
 }

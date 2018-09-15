@@ -31,7 +31,7 @@ void IIC_Init(void)
   {
 	GPIO_InitTypeDef GPIO_InitStructure;
 	RCC_APB2PeriphClockCmd(	RCC_APB2Periph_GPIOB, ENABLE);	//使能GPIOB时钟
-	   
+	
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12|GPIO_Pin_13;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP ;   //推挽输出
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -39,6 +39,7 @@ void IIC_Init(void)
 	IIC_SCL=1;
 	IIC_SDA=1;
         static_flag = 0;
+
   }
 }
 //产生IIC起始信号
