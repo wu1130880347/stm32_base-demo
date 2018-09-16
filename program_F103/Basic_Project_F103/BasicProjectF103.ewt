@@ -2394,6 +2394,12 @@
         </group>
     </group>
     <group>
+        <name>Boards</name>
+        <file>
+            <name>$PROJ_DIR$\Boards\boards.h</name>
+        </file>
+    </group>
+    <group>
         <name>Drivers</name>
         <group>
             <name>I2C</name>

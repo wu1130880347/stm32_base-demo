@@ -1,6 +1,7 @@
 
 #include "myiic.h"
 #include "delay.h"
+#include "boards.h"
 
 
 void IIC_Init(void);                //初始化IIC的IO口	
@@ -30,15 +31,21 @@ void IIC_Init(void)
   if(static_flag)
   {
 	GPIO_InitTypeDef GPIO_InitStructure;
-	RCC_APB2PeriphClockCmd(	RCC_APB2Periph_GPIOB, ENABLE);	//使能GPIOB时钟
+	RCC_APB2PeriphClockCmd(	I2C1_RCC_SOURCE, ENABLE);	//使能GPIOB时钟
 	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12|GPIO_Pin_13;
+	GPIO_InitStructure.GPIO_Pin = I2C1_SCL_PIN_MASK;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP ;   //推挽输出
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	GPIO_Init(I2C1_SCL_SOURCE, &GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Pin = I2C1_SDA_PIN_MASK;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP ;   //推挽输出
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(I2C1_SDA_SOURCE, &GPIO_InitStructure);
+
 	IIC_SCL=1;
 	IIC_SDA=1;
-        static_flag = 0;
+    static_flag = 0;
 
   }
 }

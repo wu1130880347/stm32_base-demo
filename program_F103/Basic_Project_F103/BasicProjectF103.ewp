@@ -344,6 +344,7 @@
                     <state>$PROJ_DIR$\App</state>
                     <state>$PROJ_DIR$\App\App_os_task\</state>
                     <state>$PROJ_DIR$\App\Bsp_board_test\</state>
+                    <state>$PROJ_DIR$\Boards</state>
                     <state>$PROJ_DIR$\Drivers</state>
                     <state>$PROJ_DIR$\Drivers\Led</state>
                     <state>$PROJ_DIR$\Drivers\I2C</state>
@@ -2086,6 +2087,12 @@
                 <name>$PROJ_DIR$\App\App_os_task\app_task.h</name>
             </file>
         </group>
+    </group>
+    <group>
+        <name>Boards</name>
+        <file>
+            <name>$PROJ_DIR$\Boards\boards.h</name>
+        </file>
     </group>
     <group>
         <name>Drivers</name>

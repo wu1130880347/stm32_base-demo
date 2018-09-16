@@ -33,6 +33,10 @@
         <encoding>System</encoding>
     </override>
     <override>
+        <path>H:\cp_data\STM32\stm32f103_program\program_F103\Basic_Project_F103\Drivers\I2C\myiic.c</path>
+        <encoding>System</encoding>
+    </override>
+    <override>
         <path>I:\STM32\program_F103\Basic_Project_F103\Drivers\I2C\myiic.c</path>
         <encoding>System</encoding>
     </override>

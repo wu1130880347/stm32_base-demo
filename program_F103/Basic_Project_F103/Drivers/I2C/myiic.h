@@ -1,6 +1,7 @@
 #ifndef __MYIIC_H_
 #define __MYIIC_H_
 #include "sys.h"
+#include "boards.h"
 
 #ifndef SOFT_IIC
 #define SOFT_IIC TRUE
@@ -16,14 +17,14 @@
 #if (defined SOFT_IIC) && (SOFT_IIC == TRUE)
 
 //IO方向设置
-#define SDA_IN()  {GPIOB->CRH&=0XFF0FFFFF;GPIOB->CRH|=(u32)8<<20;}
-#define SDA_OUT() {GPIOB->CRH&=0XFF0FFFFF;GPIOB->CRH|=(u32)3<<20;}
+#define SDA_IN()  {GPIOB->CRL&=0X0FFFFFFF;GPIOB->CRL|=(u32)8<<28;}
+#define SDA_OUT() {GPIOB->CRL&=0X0FFFFFFF;GPIOB->CRL|=(u32)3<<28;}
 
 //IO操作函数
 //位操作对应的IO口	 
-#define IIC_SCL    PBout(12) //SCL
-#define IIC_SDA    PBout(13) //SDA	 
-#define READ_SDA   PBin(13)  //输入SDA 
+#define IIC_SCL    PBout(I2C1_SCL_PIN) //SCL
+#define IIC_SDA    PBout(I2C1_SDA_PIN) //SDA	 
+#define READ_SDA   PBin(I2C1_SDA_PIN)  //输入SDA 
 
 //IIC所有操作函数
 extern void IIC_Start(void);				//发送IIC开始信号
