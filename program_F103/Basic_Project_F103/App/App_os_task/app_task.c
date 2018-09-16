@@ -1,5 +1,6 @@
 #include "app_task.h"
 #include "xshell_cmd.h"
+#include <math.h>
 
 
 
@@ -157,7 +158,8 @@ void float_task(void *pdata)
 		//}
 		//printf("Cpu usage : %% %.1f \r\n",(float)OSCPUUsage/10);
 		OLED_ShowString(0,7,"CPU_usage:      ",8);
-		OLED_ShowFloat(80,7,(float)OSCPUUsage/10,1,8);
+		OSCPUUsage = ((short)OSCPUUsage>=0)?OSCPUUsage:(0xffff - OSCPUUsage);
+		OLED_ShowNum(80,7,OSCPUUsage,0,8);
 		OS_EXIT_CRITICAL();		//退出临界区(开中断)
 		delay_ms(500);
 	}

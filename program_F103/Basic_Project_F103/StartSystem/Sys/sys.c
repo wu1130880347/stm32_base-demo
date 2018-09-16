@@ -40,6 +40,18 @@ void INTX_ENABLE(void)
     __ASM volatile("BX r14");
 }
 
+void My_SystemReset(void)
+{
+    __ASM volatile("msr faultmask, r0");
+    __ASM volatile("MOV R0, #1");
+    __ASM volatile("MSR FAULTMASK, R0");
+    __ASM volatile("LDR R0, =0xE000ED0C");
+    __ASM volatile("LDR R1, =0x05FA0004");
+    __ASM volatile("STR R1, [R0]");
+
+    while(1);
+}
+
 
 void assert_failed(u8* file, u32 line)
 { 

@@ -149,9 +149,6 @@ void usart_init(u32 bound){
 }
 
 
-
-u8 rece_data = 0;
-//u8 temp_i = 0;
 void USART1_IRQHandler(void)                	//串口1中断服务程序
 	{
           
@@ -160,8 +157,7 @@ void USART1_IRQHandler(void)                	//串口1中断服务程序
 #endif
 	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
 		{
-            rece_data = USART_ReceiveData(USART1);
-            analysis_cmd(rece_data);                   //解析命令  读取接收到的数据
+            analysis_cmd((u8)USART_ReceiveData(USART1));                   //解析命令  读取接收到的数据
             /*
             if(temp_i == 0)OLED_ShowNum(temp_i*16,0,rece_data,0,8);
             else if(temp_i == 1)OLED_ShowNum(temp_i*16,0,rece_data,0,8);
@@ -170,8 +166,6 @@ void USART1_IRQHandler(void)                	//串口1中断服务程序
             temp_i++;
             if(temp_i == 4)temp_i = 0;
             */
-            
-            
         } 
 #if SYSTEM_SUPPORT_OS 	//如果SYSTEM_SUPPORT_OS为真，则需要支持OS.
 	OSIntExit();  											 

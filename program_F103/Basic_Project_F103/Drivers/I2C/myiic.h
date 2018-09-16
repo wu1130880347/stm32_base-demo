@@ -31,7 +31,7 @@ extern void IIC_Start(void);				//发送IIC开始信号
 extern void IIC_Stop(void);
 
 extern void IIC_Init(void);                //初始化IIC的IO口
-extern void test_i2c(void);
+extern u16 test_i2c(u8* cmd_data);
 extern u8 IIC_Write_One_Byte(u8 daddr,u8 addr,u8 data);
 extern u8 IIC_Read_One_Byte(u8 daddr,u8 addr);	  
 

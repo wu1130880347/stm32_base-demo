@@ -4,20 +4,25 @@
 #include "myiic.h"
 #include "app_task.h"
 
+
 ////////////////////////////////////////////////////////////////////////////////// 	 
-//如果使用ucos,则包括下面的头文件即可.
+//如果使用ucos,则包含下面的头文件即可.
 #if SYSTEM_SUPPORT_OS
 #include "includes.h"					//ucos 使用	  
 #endif
 
 #if (defined XSHELL_SUPPORT) && (XSHELL_SUPPORT == TRUE)
 
-
-/* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 
+
+Cmd_list cmd_header ;
+
 const char str_help[] = "\r\n cmd : iic_dection! or iic_dection    IIC探测工具  \
-                         \r\n cmd : help! or help                  使用帮助     ";
+                         \r\n cmd : help! or help                  使用帮助     \
+						 \r\n cmd : ls! or ls                 get help list    \
+						 \r\n cmd : reset! or reset           reset the system \
+						                     ";
 
  const u8 cmd_clear[] = {0x1b,0x5b,0x48,0x1b,0x5b,0x4a,0x00};
  const u8 cmd_del_byte[] = {0x08,0x00};
@@ -27,13 +32,46 @@ const char str_help[] = "\r\n cmd : iic_dection! or iic_dection    IIC探测工�
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 int analysis_cmd(u8 Res);
+u8 xsehll_init(void);
 u8 send_cmd_console(const u8 * send_cmd);
 u8 do_cmd(u8 *str);
 //char pre_cmd[128] = {0};
 //u16 console_flag = 0;
-
-void work_help(void);
+u16 work_help(u8* cmd_data);
 void console_task(void *pdata);
+u16 reset_system(u8* cmd_data);
+
+/* Private typedef -----------------------------------------------------------*/
+
+
+const cmd_Hander cmd_task_arr[] = 
+{
+ 	test_i2c,				//执行函数位置 1 函数
+	work_help,				//执行函数位置 2 函数
+	reset_system,			//执行函数位置 3 函数
+};
+
+
+
+
+
+/********************************
+//返回0则成功
+********************************/
+u8 xshell_init(void)
+{
+  	u16 cmd_num = 0;
+	
+	cmd_header.next = NULL;
+	cmd_header.cmdStr = NULL;
+	cmd_header.index_list = NULL;
+	cmd_header.cmd_data = NULL;
+	
+
+	cmd_num = sizeof(cmd_task_arr)/4;
+	printf("cmd_num = %d \r\n",cmd_num);
+    return 0;
+}
 
 void console_task(void *pdata)
 {
@@ -61,7 +99,7 @@ void console_task(void *pdata)
 			send_cmd_console(cmd_con);          //向显示台显示命令
 		} 
 		
-		OSTaskSuspend(CONSOLE_TASK_PRIO);	 //挂起任务，等下一次收到数据
+		OSTaskSuspend(CONSOLE_TASK_PRIO);	 //挂起任务，等下一次收到数据?
 	}
 	
 }
@@ -106,21 +144,30 @@ int analysis_cmd(u8 Res)
 				{
 					USART_RX_BUF[USART_RX_STA&0X3FFF]=Res ;
 					USART_RX_STA++;
-					if(USART_RX_STA>(USART_REC_LEN-1))USART_RX_STA=0;//接收数据错误,重新开始接收	  
+					if(USART_RX_STA>(USART_REC_LEN-1))USART_RX_STA=0;//接收数据错误,重新开始接?
 				}
 						 
 	return 0;
 }
 
-void work_help(void)
+u16 work_help(u8* cmd_data)
 {
       printf(str_help);
+      return 0;
+}
+
+u16 reset_system(u8* cmd_data)
+{
+	My_SystemReset();
+	return 0;
 }
 
 u8 do_cmd(u8 *str)
 {
-  if(strcmp((char *)str,"iic_dection") == 0)test_i2c();
-  else if(strcmp((char *)str,"help") == 0)work_help();
+  if(strcmp((char *)str,"iic_dection") == 0)test_i2c("0");
+  else if(strcmp((char *)str,"help") == 0)work_help("0");
+  else if(strcmp((char *)str,"ls") == 0)work_help("0");
+  else if(strcmp((char *)str,"reset") == 0)reset_system("0");
   else printf("\r\nInput error ...  Please Input \"help!\" to get infomation...");
   return 0;
 }

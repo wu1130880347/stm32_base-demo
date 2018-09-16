@@ -3,11 +3,12 @@
 
 #define TRUE     1
 #define FALSE    0
+//#define NULL     0
 #define USE_FULL_ASSERT
 
 
 #ifndef __ICCARM__
-#define  __ICCARM__        //IAR下使用  
+#define  __ICCARM__        //IAR下使�?  
 #endif
 
 #define DEBUG_UART TRUE

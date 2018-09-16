@@ -64,6 +64,7 @@ void WFI_SET(void);		//执行WFI指令
 void INTX_DISABLE(void);//关闭所有中断
 void INTX_ENABLE(void);	//开启所有中断
 void MSR_MSP(u32 addr);	//设置堆栈地址
+void My_SystemReset(void);
 
 extern void assert_failed(u8* file, u32 line);  //参数配置失败，进入此回调
 

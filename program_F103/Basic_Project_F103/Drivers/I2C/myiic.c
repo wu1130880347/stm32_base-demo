@@ -7,7 +7,7 @@
 void IIC_Init(void);                //初始化IIC的IO口	
 u8 IIC_Write_One_Byte(u8 daddr,u8 addr,u8 data);
 u8 IIC_Read_One_Byte(u8 daddr,u8 addr);	
-void test_i2c(void);
+u16 test_i2c(u8* cmd_data);
 
 #if (defined SOFT_IIC) && (SOFT_IIC == TRUE)
 
@@ -203,7 +203,7 @@ u8 IIC_Detection(u8 address)
         return temp;
 }
 
-void test_i2c(void)
+u16 test_i2c(u8* cmd_data)
 {
   u16 address = 0;
   IIC_Init();
@@ -218,6 +218,7 @@ void test_i2c(void)
   }
   Dprintf(IIC_DECTION,"\r\n/*******************************/\r\n");
   Dprintf(IIC_DECTION,"/*******************************/\r\n");
+  return 0;
 }
 
 #elif (defined HARD_IIC) && (HARD_IIC == TRUE)
