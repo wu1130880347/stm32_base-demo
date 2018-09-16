@@ -7,6 +7,9 @@
 void IIC_Init(void);                //初始化IIC的IO口	
 u8 IIC_Write_One_Byte(u8 daddr,u8 addr,u8 data);
 u8 IIC_Read_One_Byte(u8 daddr,u8 addr);	
+void IIC_Send_Byte(u8 txd);			//IIC发送一个字节
+u8 IIC_Read_Byte(unsigned char ack);//IIC读取一个字节
+
 u16 test_i2c(u8* cmd_data);
 
 #if (defined SOFT_IIC) && (SOFT_IIC == TRUE)
@@ -16,10 +19,8 @@ u16 test_i2c(u8* cmd_data);
 			 
 void IIC_Start(void);				//发送IIC开始信号
 void IIC_Stop(void);	  			//发送IIC停止信号
-void IIC_Send_Byte(u8 txd);			//IIC发送一个字节
 void IIC_Ack(void);					//IIC发送ACK信号
 void IIC_NAck(void);				//IIC不发送ACK信号
-u8 IIC_Read_Byte(unsigned char ack);//IIC读取一个字节
 u8 IIC_Wait_Ack(void); 				//IIC等待ACK信号
 u8 IIC_Detection(u8 address);
 
@@ -223,59 +224,178 @@ u16 test_i2c(u8* cmd_data)
 
 #elif (defined HARD_IIC) && (HARD_IIC == TRUE)
 
+u16 timeout = 0;
+u8 IIC_Write_One_Byte(u8 daddr,u8 addr,u8 data)
+{
+	I2C_GenerateSTART(I2C1,ENABLE);//发送起始信号
+	while(!I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_MODE_SELECT))//检测	EV5事件
+	{
+		  if((timeout--)==0)
+			Dprintf(IIC_DECTION,"W_EV5 Fail");
+	}	timeout=1000;
+	
+	I2C_Send7bitAddress(I2C1,daddr,I2C_Direction_Transmitter);//发送7位EEPROM的硬件地址
+	while(!I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))//检测EV6事件
+	{
+		  if((timeout--)==0)
+			Dprintf(IIC_DECTION,"W_EV6 Fail");
+	}	timeout=1000;
+	
+	I2C_SendData(I2C1,addr);//发送操作的内存地址
+	while(!I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_BYTE_TRANSMITTED))//检测EV8事件
+	{
+		  if((timeout--)==0)
+			Dprintf(IIC_DECTION,"W_EV8 Fail");
+	}	timeout=1000;	
+	
+	I2C_SendData(I2C1,data);//要写入的数据（一个字节）
+	while(!I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_BYTE_TRANSMITTED))//检测EV8事件
+	{
+		  if((timeout--)==0)
+			Dprintf(IIC_DECTION,"W_EV8 Fail");
+	}	timeout=1000;
+	
+	
+	I2C_GenerateSTOP(I2C1,ENABLE);//发送结束信号
+        return 0;
+
+}
+u8 IIC_Read_One_Byte(u8 daddr,u8 addr)
+{
+	u8 readtemp;
+	I2C_GenerateSTART(I2C1,ENABLE);
+	while(!I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_MODE_SELECT))//5
+	{
+		  if((timeout--)==0)
+			Dprintf(IIC_DECTION,"R_EV5 Fail");
+	}	timeout=1000;
+	
+	I2C_Send7bitAddress(I2C1,daddr,I2C_Direction_Transmitter);
+	while(!I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))//6
+	{
+		  if((timeout--)==0)
+			Dprintf(IIC_DECTION,"R_EV6 Fail");
+	}	timeout=1000;
+	
+	
+	I2C_SendData(I2C1,addr);
+  while(I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_BYTE_TRANSMITTED) != SUCCESS )
+  {
+ 		  if((timeout--)==0)
+			Dprintf(IIC_DECTION,"R_EV8 Fail");
+	}	timeout=1000;
+	
+	I2C_GenerateSTART(I2C1,ENABLE);
+	while(!I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_MODE_SELECT))
+	{
+		  if((timeout--)==0)
+			Dprintf(IIC_DECTION,"R_EV5 Fail");
+	}	timeout=1000;
+	
+	I2C_Send7bitAddress(I2C1,daddr,I2C_Direction_Receiver);
+	while(!I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED))
+	{
+		  if((timeout--)==0)
+			Dprintf(IIC_DECTION,"R_EV6 Fail");
+	}	timeout=1000;
+	
+	I2C_AcknowledgeConfig(I2C1,DISABLE);
+ 
+  /* 检测 EV7 事件 */
+  while(I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_BYTE_RECEIVED) != SUCCESS )
+  {
+ 	  if((timeout--)==0)
+			Dprintf(IIC_DECTION,"R_EV7 Fail");
+	}	timeout=1000;
+  
+  /* 读取接收数据 */
+  readtemp = I2C_ReceiveData(I2C1);
+   
+  /* 停止信号 */
+  I2C_GenerateSTOP(I2C1,ENABLE);
+  
+  return readtemp;
+
+}
+u8 IIC_Detection(u8 address)
+{
+        u8 temp = 0;
+       I2C_GenerateSTART(I2C1,ENABLE);
+	   timeout = 100;
+	while(!I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_MODE_SELECT))
+	{
+		  if((timeout--)==0){temp = 0;break;}
+	}	timeout=100;
+	I2C_Send7bitAddress(I2C1,address,I2C_Direction_Transmitter);
+	while(!I2C_CheckEvent(I2C1,I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))//6
+	{
+		  if((timeout--)==0){temp = 1;break;}
+	}
+	I2C_GenerateSTOP(I2C1,ENABLE);
+    return temp;
+}
+
+u16 test_i2c(u8* cmd_data)
+{
+  u16 address = 0;
+  IIC_Init();
+  Dprintf(IIC_DECTION,"\r\n\r\n/*******************************/\r\n");
+  Dprintf(IIC_DECTION,"/*******************************/\r\n");
+  Dprintf(IIC_DECTION,"I2C find address Map : \r\n");
+  for(address = 0;address <= 0xFF;address+=2)
+  {
+    if((address) % 16 == 0)Dprintf(IIC_DECTION,"\r\n");
+    if(!IIC_Detection((u8)address))Dprintf(IIC_DECTION," 0x%x ",address);
+    else Dprintf(IIC_DECTION,"  No  ");
+  }
+  Dprintf(IIC_DECTION,"\r\n/*******************************/\r\n");
+  Dprintf(IIC_DECTION,"/*******************************/\r\n");
+  return 0;
+
+}
 
 u8 IIC_Read_Byte(unsigned char ack)
 {
-	unsigned char i,receive=0;
-	SDA_IN();//SDA设置为输入
-    for(i=0;i<8;i++ )
-	{
-        IIC_SCL=0; 
-        delay_us(2);
-		IIC_SCL=1;
-        receive<<=1;
-        if(READ_SDA)receive++;   
-	//delay_us(1); 
-    }					 
-    if (!ack)
-        IIC_NAck();//发送nACK
-    else
-        IIC_Ack(); //发送ACK   
-    return receive;
+	return 0;	
 }
 
 void IIC_Send_Byte(u8 txd)
 {                        
-    u8 t;   
-	SDA_OUT(); 	    
-    IIC_SCL=0;//拉低时钟开始数据传输
-    for(t=0;t<8;t++)
-    {              
-        IIC_SDA=(txd&0x80)>>7;
-        txd<<=1; 	  
-	//delay_us(2);   //对TEA5767这三个延时都是必须的
-		IIC_SCL=1;
-	//delay_us(2); 
-		IIC_SCL=0;	
-	//delay_us(2);
-    }	 
+    
 } 
 
 void IIC_Init(void)
-{			
-  GPIO_InitTypeDef  GPIO_InitStructure;
+{
+	static u8 static_flag = 1;
+  if(static_flag)
+  {			
+  	GPIO_InitTypeDef GPIO_InitStructure;
+	I2C_InitTypeDef I2C_InitStruct;
 
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);//使能GPIOB时钟
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C1, ENABLE);	//使能I2C1时钟
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);
+	
+	GPIO_InitStructure.GPIO_Pin = I2C1_SCL_PIN_MASK;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP ;   //推挽输出
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(I2C1_SCL_SOURCE, &GPIO_InitStructure);
 
-  //GPIOB8,B9初始化设置
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8 | GPIO_Pin_9;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//普通输出模式
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
-  GPIO_Init(GPIOB, &GPIO_InitStructure);//初始化
-	IIC_SCL=1;
-	IIC_SDA=1;
+	GPIO_InitStructure.GPIO_Pin = I2C1_SDA_PIN_MASK;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP ;   //推挽输出
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(I2C1_SDA_SOURCE, &GPIO_InitStructure);
+
+	I2C_InitStruct.I2C_Ack=I2C_Ack_Enable;
+	I2C_InitStruct.I2C_AcknowledgedAddress=I2C_AcknowledgedAddress_7bit;
+	I2C_InitStruct.I2C_ClockSpeed=100000;
+	I2C_InitStruct.I2C_DutyCycle=I2C_DutyCycle_2;
+	I2C_InitStruct.I2C_Mode=I2C_Mode_I2C;
+	I2C_InitStruct.I2C_OwnAddress1=0x55;
+	I2C_Init(I2C1,&I2C_InitStruct);
+	
+	I2C_Cmd(I2C1,ENABLE);
+  }
+
 }
 #endif
 

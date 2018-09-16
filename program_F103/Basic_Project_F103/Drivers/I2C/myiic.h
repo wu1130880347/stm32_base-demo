@@ -38,8 +38,9 @@ extern u8 IIC_Read_One_Byte(u8 daddr,u8 addr);
 #elif (defined HARD_IIC) && (HARD_IIC == TRUE)
 
 extern void IIC_Init(void);                //初始化IIC的IO口	
-extern void IIC_Write_One_Byte(u8 daddr,u8 addr,u8 data);
+extern u8 IIC_Write_One_Byte(u8 daddr,u8 addr,u8 data);
 extern u8 IIC_Read_One_Byte(u8 daddr,u8 addr);	  
+extern u16 test_i2c(u8* cmd_data);
 
 #else
 

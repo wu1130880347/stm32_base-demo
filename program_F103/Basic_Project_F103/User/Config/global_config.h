@@ -45,8 +45,8 @@
 
 
 //Config IIC Mode
-#define SOFT_IIC TRUE
-#define HARD_IIC FALSE
+#define SOFT_IIC FALSE
+#define HARD_IIC TRUE
 
 //Config OLED USE Mode
 #define OLED_RAM FALSE
