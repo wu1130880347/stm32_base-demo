@@ -4,11 +4,16 @@
 #include "sys.h"
 #include "global_config.h"
 
+
+extern u8 play_buzzer;    //蜂鸣器播放
+
 //clear xshell
 extern int analysis_cmd(u8 Res);
 extern u8 do_cmd(u8 *str);
 extern void console_task(void *pdata);
 extern u8 xshell_init(void);
+
+extern u8 find_para(u8* data,u16* para);
 
 /* Exported define -----------------------------------------------------------*/
 //命令列表定义

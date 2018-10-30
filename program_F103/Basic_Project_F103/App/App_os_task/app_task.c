@@ -1,5 +1,6 @@
 #include "app_task.h"
 #include "xshell_cmd.h"
+#include "buzzer.h"
 #include <math.h>
 
 
@@ -58,6 +59,17 @@ __attribute__((aligned(8))) OS_STK FLOAT_TASK_STK[FLOAT_STK_SIZE];
 void float_task(void *pdata);
 
 
+//BUZZER任务
+//设置任务优先级
+#define BUZZER_TASK_PRIO       			14 
+//设置任务堆栈大小
+#define BUZZER_STK_SIZE  					128
+//任务堆栈
+OS_STK BUZZER_TASK_STK[BUZZER_STK_SIZE];
+//任务函数
+void BUZZER_task(void *pdata);
+
+
 
 
 
@@ -78,9 +90,11 @@ void start_task(void *pdata)
  	OSTaskCreate(led1_task,(void *)0,(OS_STK*)&LED1_TASK_STK[LED1_STK_SIZE-1],LED1_TASK_PRIO);	 				   
 	OSTaskCreate(float_task,(void*)0,(OS_STK*)&FLOAT_TASK_STK[FLOAT_STK_SIZE-1],FLOAT_TASK_PRIO);
 	OSTaskCreate(console_task,(void*)0,(OS_STK*)&CONSOLE_TASK_STK[CONSOLE_STK_SIZE-1],CONSOLE_TASK_PRIO);
+	OSTaskCreate(BUZZER_task,(void*)0,(OS_STK*)&BUZZER_TASK_STK[BUZZER_STK_SIZE-1],BUZZER_TASK_PRIO);
         
     Dprintf(SYS_TRACE,"start_task is successful...\r\n");
-                
+
+	//OSTaskSuspend(BUZZER_TASK_PRIO);            
   	OSTaskSuspend(START_TASK_PRIO);	//挂起起始任务.  
 	OS_EXIT_CRITICAL();				//退出临界区(可以被中断打断)
 
@@ -90,6 +104,48 @@ void start_task(void *pdata)
 
 
 unsigned char flag_use = 1; 
+
+void BUZZER_task(void *pdata)
+{
+        OS_CPU_SR cpu_sr=0;
+	u16 i = 0;
+	while(1)
+	{
+		/*
+		for(i = 1500;i<=4500;i+=200)
+		{
+			OS_ENTER_CRITICAL();	//进入临界区(关闭中断)
+			TIM23_PWM_Init(i,50,10,50);
+			OS_EXIT_CRITICAL();		//退出临界区(开中断)
+			delay_ms(2000);
+		}
+		for(i = 4500;i>=1500;i-=200)
+		{
+			OS_ENTER_CRITICAL();	//进入临界区(关闭中断)
+			TIM23_PWM_Init(i,50,10,50);
+			OS_EXIT_CRITICAL();		//退出临界区(开中断)
+			delay_ms(2000);
+		}
+		*/
+		TIM23_PWM_Init(2300,050,10,020);
+		delay_ms(100);
+		TIM23_PWM_Init(2600,050,10,020);
+		delay_ms(100);
+		TIM23_PWM_Init(2900,050,4,010);
+		delay_ms(400);
+		TIM23_PWM_Init(0,0,0,0);
+		delay_ms(1000);
+
+		TIM23_PWM_Init(2900,050,10,020);
+		delay_ms(100);
+		TIM23_PWM_Init(2600,050,10,020);
+		delay_ms(100);
+		TIM23_PWM_Init(2300,050,4,010);
+		delay_ms(400);
+		TIM23_PWM_Init(0,0,0,0);
+		delay_ms(1000);
+	}
+}
 
 
 //LED0任务

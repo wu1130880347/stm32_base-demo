@@ -349,6 +349,7 @@
                     <state>$PROJ_DIR$\Drivers\Led</state>
                     <state>$PROJ_DIR$\Drivers\I2C</state>
                     <state>$PROJ_DIR$\Drivers\Oled</state>
+                    <state>$PROJ_DIR$\Drivers\Buzzer</state>
                     <state>$PROJ_DIR$\StartSystem</state>
                     <state>$PROJ_DIR$\StartSystem\Delay</state>
                     <state>$PROJ_DIR$\StartSystem\IncludeStm32</state>
@@ -2097,6 +2098,15 @@
     <group>
         <name>Drivers</name>
         <group>
+            <name>Buzzer</name>
+            <file>
+                <name>$PROJ_DIR$\Drivers\Buzzer\buzzer.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\Drivers\Buzzer\buzzer.h</name>
+            </file>
+        </group>
+        <group>
             <name>I2C</name>
             <file>
                 <name>$PROJ_DIR$\Drivers\I2C\myiic.c</name>
@@ -2328,6 +2338,9 @@
             <name>Usart</name>
             <group>
                 <name>Xshell_cmd</name>
+                <file>
+                    <name>$PROJ_DIR$\StartSystem\Usart\Xshell_cmd\aux_cmd.c</name>
+                </file>
                 <file>
                     <name>$PROJ_DIR$\StartSystem\Usart\Xshell_cmd\xshell_cmd.c</name>
                 </file>

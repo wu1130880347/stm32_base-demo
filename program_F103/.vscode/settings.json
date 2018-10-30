@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "*.c": "c",
+        "bsp_board_test.h": "c",
+        "led.h": "c",
+        "buzzer.h": "c",
+        "boards.h": "c",
+        "sys.h": "c",
+        "stm32f10x_conf.h": "c",
+        "stm32f10x_tim.h": "c",
+        "xshell_cmd.h": "c"
+    }
+}
