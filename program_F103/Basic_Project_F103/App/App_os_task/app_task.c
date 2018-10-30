@@ -92,7 +92,7 @@ void start_task(void *pdata)
 	OSTaskCreate(console_task,(void*)0,(OS_STK*)&CONSOLE_TASK_STK[CONSOLE_STK_SIZE-1],CONSOLE_TASK_PRIO);
 	OSTaskCreate(BUZZER_task,(void*)0,(OS_STK*)&BUZZER_TASK_STK[BUZZER_STK_SIZE-1],BUZZER_TASK_PRIO);
         
-    Dprintf(SYS_TRACE,"start_task is successful...\r\n");
+        Dprintf(SYS_TRACE,"start_task is successful...\r\n");
 
 	//OSTaskSuspend(BUZZER_TASK_PRIO);            
   	OSTaskSuspend(START_TASK_PRIO);	//挂起起始任务.  
@@ -108,42 +108,65 @@ unsigned char flag_use = 1;
 void BUZZER_task(void *pdata)
 {
         OS_CPU_SR cpu_sr=0;
-	u16 i = 0;
+        u16 i;
 	while(1)
 	{
+//扫频音
 		/*
-		for(i = 1500;i<=4500;i+=200)
+		for(i = 3500;i<=4500;i+=100)
 		{
 			OS_ENTER_CRITICAL();	//进入临界区(关闭中断)
-			TIM23_PWM_Init(i,50,10,50);
+			TIM23_PWM_Init(i,050,10,005);
+			delay_ms(150);
+			//TIM23_PWM_Init(0,0,0,0);
 			OS_EXIT_CRITICAL();		//退出临界区(开中断)
-			delay_ms(2000);
+			delay_ms(350);
 		}
-		for(i = 4500;i>=1500;i-=200)
+		for(i = 4500;i>=3500;i-=100)
 		{
 			OS_ENTER_CRITICAL();	//进入临界区(关闭中断)
-			TIM23_PWM_Init(i,50,10,50);
+			TIM23_PWM_Init(i,050,10,005);
+			delay_ms(150);
 			OS_EXIT_CRITICAL();		//退出临界区(开中断)
-			delay_ms(2000);
+			delay_ms(350);
 		}
 		*/
-		TIM23_PWM_Init(2300,050,10,020);
+
+//三点音
+	/*
+		TIM23_PWM_Init(2400,050,10,010);
 		delay_ms(100);
-		TIM23_PWM_Init(2600,050,10,020);
-		delay_ms(100);
-		TIM23_PWM_Init(2900,050,4,010);
-		delay_ms(400);
+		TIM23_PWM_Init(2650,050,10,005);
+		delay_ms(200);
+		TIM23_PWM_Init(2900,050,4,001);
+		delay_ms(700);
 		TIM23_PWM_Init(0,0,0,0);
 		delay_ms(1000);
 
-		TIM23_PWM_Init(2900,050,10,020);
+		TIM23_PWM_Init(2900,050,10,010);
 		delay_ms(100);
-		TIM23_PWM_Init(2600,050,10,020);
-		delay_ms(100);
-		TIM23_PWM_Init(2300,050,4,010);
-		delay_ms(400);
+		TIM23_PWM_Init(2650,050,10,005);
+		delay_ms(200);
+		TIM23_PWM_Init(2400,050,4,001);
+		delay_ms(700);
 		TIM23_PWM_Init(0,0,0,0);
 		delay_ms(1000);
+  
+		TIM23_PWM_Init(2400,050,4,001);
+		delay_ms(800);
+		TIM23_PWM_Init(0,0,0,0);
+		delay_ms(2000);
+		TIM23_PWM_Init(2400,050,4,001);
+		delay_ms(800);
+		TIM23_PWM_Init(0,0,0,0);
+		delay_ms(2000);
+	*/
+//单点音
+	TIM23_PWM_Init(3100,050,4,001);
+	delay_ms(800);
+	TIM23_PWM_Init(0,0,0,0);
+	delay_ms(2200);
+		
 	}
 }
 

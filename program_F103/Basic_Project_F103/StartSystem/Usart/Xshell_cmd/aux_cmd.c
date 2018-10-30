@@ -8,10 +8,8 @@ u8 find_para(u8* data,u16* para)
     {
         if(*data == ' ')
             {
-
                 if(sizeof(data) < 19)
-                return -1;
-
+                  return -1;
                 continue;
             }
         if(*data < '0' || *data > '9')
@@ -26,4 +24,5 @@ u8 find_para(u8* data,u16* para)
         }
         
     }
+    return -1;
 }

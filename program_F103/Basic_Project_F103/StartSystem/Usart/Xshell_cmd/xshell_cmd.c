@@ -16,8 +16,6 @@
 
 /* Private define ------------------------------------------------------------*/
 
-u8 play_buzzer = 0;
-
 Cmd_list cmd_header ;
 
 const char str_help[] = "\r\n cmd : iic_dection! or iic_dection    IIC探测工具  \

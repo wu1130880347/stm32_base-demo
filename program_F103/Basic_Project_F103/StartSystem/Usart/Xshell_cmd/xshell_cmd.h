@@ -5,8 +5,6 @@
 #include "global_config.h"
 
 
-extern u8 play_buzzer;    //·äÃùÆ÷²¥·Å
-
 //clear xshell
 extern int analysis_cmd(u8 Res);
 extern u8 do_cmd(u8 *str);
