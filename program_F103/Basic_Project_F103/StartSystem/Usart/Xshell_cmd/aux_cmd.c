@@ -1,28 +1,67 @@
 #include "xshell_cmd.h"
 
+u16 strToint(u8 * str);
 u8 find_para(u8* data,u16* para);
 
 u8 find_para(u8* data,u16* para)
 {
-    while(*(data++))
+    u8 fg_num = 0;
+    u8 i = 0, j = 0, k = 0;
+    u8 temp[32-1] = {0};
+    while(*data)
     {
         if(*data == ' ')
-            {
-                if(sizeof(data) < 19)
-                  return -1;
-                continue;
-            }
-        if(*data < '0' || *data > '9')
-            return -1;
-        else 
         {
-            para[0] = (*data - '0')*10000 + (*(data+1) - '0')*1000 + (*(data+2) - '0')*100 + (*(data+3) - '0')*10 + (*(data+4) - '0');
-            para[1] = (*(data+6) - '0')*10000 + (*(data+7) - '0')*1000 + (*(data+8) - '0')*100 + (*(data+9) - '0')*10 + (*(data+10) - '0');
-            para[2] = (*(data+12) - '0')*100 + (*(data+13) - '0')*10 + (*(data+14) - '0');
-            para[3] = (*(data+16) - '0')*100 + (*(data+17) - '0')*10 + (*(data+18) - '0');
-            return 0;
+            fg_num = 0;
+            k = 0;
+            temp[j] = 0;
+            j = 0;
+            if(*temp)
+            {
+                if(i >= 1)
+                {
+                	*(para + i - 1) = strToint(temp);
+				}
+				i++;
+                if(i > 4) return 0; 
+            }   
         }
+        else
+        {
+            if(fg_num == 0 || k == 1)
+            {
+                temp[j++] = *data;
+                k = 1;
+            }
+            fg_num = 1;
+        }
+        data++;
+        if(*data == 0)
+       	{
+       		 temp[j] = 0;
+       		 *(para + i - 1) = strToint(temp);
+		}
         
     }
+    if(i < 4)
+    {
+        for(;i<4;i++)
+            *(para + i) = 0;
+        return 0;
+    }
+
     return -1;
+}
+
+
+u16 strToint(u8 * str)
+{
+    u16 temp = 0;
+    while(*str)
+    {
+    	if(*str >='0' && *str <= '9')
+        temp = temp * 10 + *str - '0';
+        str++;
+    }
+    return temp;
 }

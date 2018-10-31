@@ -89,18 +89,18 @@ else
 		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 		GPIO_Init(GPIOA, &GPIO_InitStructure);//初始化GPIO
 		
-		printf("\r\n %d  %d  %d  %d",freq1,freq2,duty1,duty2);
+		Dprintf(SYS_TRACE,"\r\n %d  %d  %d  %d",freq1,freq2,duty1,duty2);
 		TIM_Cmd(TIM2, DISABLE);  //使能TIM3
 		TIM_Cmd(TIM3, DISABLE);
 
 		temp = 2000000/freq1;
-		printf("\r\nbuzzer freq = %dhz",freq1);
+		Dprintf(SYS_TRACE,"\r\nbuzzer freq = %dhz",freq1);
 		TIM_SetAutoreload(TIM2,temp);
 		TIM_PrescalerConfig(TIM2,36-1,TIM_PSCReloadMode_Immediate);
 		TIM_SetCompare2(TIM2,temp * duty1 / 100);
 
 		temp = 20000/freq2;
-		printf("\r\npower freq = %d*mhz",freq2*100);
+		Dprintf(SYS_TRACE,"\r\npower freq = %d*mhz",freq2*100);
 		TIM_SetAutoreload(TIM3,temp);
 		TIM_PrescalerConfig(TIM3,36000-1,TIM_PSCReloadMode_Immediate);
 		TIM_SetCompare1(TIM3,temp * duty2 / 100);

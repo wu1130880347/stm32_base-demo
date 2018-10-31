@@ -92,7 +92,7 @@ void Init_System(void)
     /*SYSCLK configuration*/
     RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
 
-	  NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);       //设置中断优先级分组为组2：2位抢占优先级，2位响应优先级
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);       //设置中断优先级分组为组2：2位抢占优先级，2位响应优先级
 
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,DISABLE);
 
