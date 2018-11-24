@@ -2420,6 +2420,15 @@
             </file>
         </group>
         <group>
+            <name>Is31f32xx</name>
+            <file>
+                <name>$PROJ_DIR$\Drivers\Is31F32xx\Is31f32xx.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\Drivers\Is31F32xx\Is31f32xx.h</name>
+            </file>
+        </group>
+        <group>
             <name>Led</name>
             <file>
                 <name>$PROJ_DIR$\Drivers\Led\led.c</name>

@@ -19,6 +19,8 @@ I:\STM32\stm32f103_program\program_F103\Basic_Project_F103\Drivers\I2C
 -I
 I:\STM32\stm32f103_program\program_F103\Basic_Project_F103\Drivers\Oled
 -I
+I:\STM32\stm32f103_program\program_F103\Basic_Project_F103\Drivers\Is31f32xx
+-I
 I:\STM32\stm32f103_program\program_F103\Basic_Project_F103\Drivers\Buzzer
 -I
 I:\STM32\stm32f103_program\program_F103\Basic_Project_F103\StartSystem
@@ -82,6 +84,8 @@ I:\STM32\stm32f103_program\program_F103\Basic_Project_F103\Drivers\Led
 I:\STM32\stm32f103_program\program_F103\Basic_Project_F103\Drivers\I2C
 -I
 I:\STM32\stm32f103_program\program_F103\Basic_Project_F103\Drivers\Oled
+-I
+I:\STM32\stm32f103_program\program_F103\Basic_Project_F103\Drivers\Is31f32xx
 -I
 I:\STM32\stm32f103_program\program_F103\Basic_Project_F103\Drivers\Buzzer
 -I

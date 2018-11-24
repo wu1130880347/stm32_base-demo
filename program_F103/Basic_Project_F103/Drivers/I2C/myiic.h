@@ -4,11 +4,11 @@
 #include "boards.h"
 
 #ifndef SOFT_IIC
-#define SOFT_IIC TRUE
+#define SOFT_IIC FALSE
 #endif
 
 #ifndef HARD_IIC
-#define HARD_IIC FALSE
+#define HARD_IIC TRUE
 #endif
 
 #define IIC_DECTION TRUE
@@ -33,14 +33,19 @@ extern void IIC_Stop(void);
 extern void IIC_Init(void);                //初始化IIC的IO口
 extern u16 test_i2c(u8* cmd_data);
 extern u8 IIC_Write_One_Byte(u8 daddr,u8 addr,u8 data);
-extern u8 IIC_Read_One_Byte(u8 daddr,u8 addr);	  
+extern u8 IIC_Read_One_Byte(u8 daddr,u8 addr);
+extern u8 IIC_Detection(u8 address);	  
 
 #elif (defined HARD_IIC) && (HARD_IIC == TRUE)
+#define TIME_OUT_US 1000
 
 extern void IIC_Init(void);                //初始化IIC的IO口	
 extern u8 IIC_Write_One_Byte(u8 daddr,u8 addr,u8 data);
 extern u8 IIC_Read_One_Byte(u8 daddr,u8 addr);	  
 extern u16 test_i2c(u8* cmd_data);
+extern u8 IIC_Write_n_Byte(u8 daddr, u8 addr, u8 *data, u16 len);
+extern u8 IIC_Read_n_Byte(u8 daddr, u8 addr, u8 *data, u16 len);
+extern u8 IIC_Detection(u8 address);
 
 #else
 

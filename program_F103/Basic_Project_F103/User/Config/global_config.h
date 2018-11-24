@@ -45,8 +45,8 @@
 
 
 //Config IIC Mode
-#define SOFT_IIC TRUE
-#define HARD_IIC FALSE
+#define SOFT_IIC FALSE
+#define HARD_IIC TRUE
 
 //Config OLED USE Mode
 #define OLED_RAM FALSE
@@ -55,6 +55,8 @@
 #define OLED_NORMAL TRUE
 
 #define XSHELL_SUPPORT TRUE
+#define OLED_SUPPORT FALSE
+#define IS31F32XX_SUPPORT TRUE
 
 //Config This Project Applied to The Board
 

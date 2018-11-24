@@ -8,6 +8,9 @@
         "sys.h": "c",
         "stm32f10x_conf.h": "c",
         "stm32f10x_tim.h": "c",
-        "xshell_cmd.h": "c"
+        "xshell_cmd.h": "c",
+        "is31f32xx.h": "c",
+        "myiic.h": "c",
+        "global_config.h": "c"
     }
 }
